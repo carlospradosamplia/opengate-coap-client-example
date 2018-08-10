@@ -1,10 +1,10 @@
 {
   "version": "8.0",
-  "device": "coap01",
+  "device": "your-device-id",
   "datastreams": [
     {
       "id": "temperature.from.pressure",
-      "datapoints": [ { "value": 32 } ]
+      "datapoints": [ { "value": 11 } ]
     },
     {
       "id": "temperature.from.humidity",
