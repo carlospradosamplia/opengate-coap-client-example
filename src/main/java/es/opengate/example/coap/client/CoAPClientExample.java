@@ -27,21 +27,12 @@ public class CoAPClientExample {
         FileInputStream propertiesInputStream = new FileInputStream("config.properties");
         configuration.load(propertiesInputStream);
         propertiesInputStream.close();
-
+        // Set configuration
         String host = configuration.getProperty("opengate.coap.host");
         int port = Integer.parseInt(configuration.getProperty("opengate.coap.port"));
         String apiKey = configuration.getProperty("opengate.apikey");
         String deviceId = configuration.getProperty("opengate.deviceId");
         String path = configuration.getProperty("opengate.coap.path");
-
-        // Create CoAP client
-
-        CoapClient client = new CoapClient.Builder(host, port)
-                .scheme(COAP_SCHEME)
-                .path(path)
-                .query()
-                .create();
-        client.setTimeout(TIMEOUT);
 
         // Load payload
         File jsonFile = new File("datapoints.json");
@@ -51,19 +42,26 @@ public class CoAPClientExample {
         jsonInputStream.read(payload, 0, jsonFileLength);
         jsonInputStream.close();
 
+        // Build CoAP client
+        CoapClient client = new CoapClient.Builder(host, port)
+                .scheme(COAP_SCHEME)
+                .path(path)
+                .query()
+                .create();
+        client.setTimeout(TIMEOUT);
 
+        // Set OpenGate options
         OptionSet optionSet = new OptionSet()
                 .addOption(new Option(API_KEY_OPTION_NUMBER, apiKey))
                 .addOption(new Option(DEVICE_ID_OPTION_NUMBER, deviceId));
 
-        // Request
+        // Perform request
         Request request = (Request) Request.newPost().setPayload(payload).setOptions(optionSet);
         CoapResponse response = client.advanced(request);
         System.out.printf("Response code %s\n", response.getCode());
 
-
-
-
+        System.out.println("Bye");
+        System.exit(0);
 
     }
 
